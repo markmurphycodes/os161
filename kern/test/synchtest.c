@@ -546,6 +546,8 @@ cvtest(int nargs, char **args)
 	}
 	spinlock_init(&status_lock);
 	test_status = TEST161_SUCCESS;
+	
+	kprintf_n("Got here!!");
 
 	testval1 = NTHREADS-1;
 	for (i=0; i<NTHREADS; i++) {
