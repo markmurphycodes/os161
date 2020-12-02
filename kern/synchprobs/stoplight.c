@@ -69,12 +69,72 @@
 #include <test.h>
 #include <synch.h>
 
+void get_lt_points(int, int *);
+void get_straight_points(int, int *);
+
+struct semaphore *sem_stoplight;
+struct lock *lk[4];
+
+char *name;
+char *message;
+
+void
+get_lt_points(int direction, int * points) {
+
+	(void)direction;
+
+	points[0] = direction;
+	points[1] = (direction + 3) % 4;
+	points[2] = (direction + 2) % 4;
+
+}
+
+void
+get_straight_points(int direction, int * points) {
+
+	(void)direction;
+
+	// A car entering from X direction will pass through points (x), ((x+3) % 4)
+	points[0] = direction;
+	points[1] = (direction + 3) % 4;
+	
+}
+
+
 /*
  * Called by the driver during initialization.
  */
 
 void
 stoplight_init() {
+
+	sem_stoplight = sem_create("sem_stoplight", 3);
+	if (sem_stoplight == NULL) {
+		panic("sem_stoplight creation failed!");
+	}
+
+	name = kmalloc(4);
+	message = kmalloc(32);
+
+	for (int i = 0; i < 4; i++) {
+		lk[i] = kmalloc(sizeof(struct lock));
+		
+		name = kstrdup("lk_");
+		name = strcat(name, (char*)&i);
+		message = strcat(name, " creation failed!");
+
+		lk[i] = lock_create(name);
+		if (lk[i] == NULL) {
+			panic(message);
+		}
+
+
+	}
+
+	if (lk == NULL) {
+		panic("lk creation failed!");
+	}
+
 	return;
 }
 
@@ -83,6 +143,13 @@ stoplight_init() {
  */
 
 void stoplight_cleanup() {
+
+	sem_destroy(sem_stoplight);
+
+	for (int i = 0; i < 4; i++) {
+		lock_destroy(lk[i]);
+	}
+
 	return;
 }
 
@@ -91,9 +158,20 @@ turnright(uint32_t direction, uint32_t index)
 {
 	(void)direction;
 	(void)index;
-	/*
-	 * Implement this function.
-	 */
+
+	int tp = direction;
+	
+	P(sem_stoplight);
+	
+	lock_acquire(lk[tp]);
+
+	inQuadrant(tp, index);
+	leaveIntersection(index);
+	
+	lock_release(lk[tp]);
+
+	V(sem_stoplight);
+
 	return;
 }
 void
@@ -101,9 +179,34 @@ gostraight(uint32_t direction, uint32_t index)
 {
 	(void)direction;
 	(void)index;
-	/*
-	 * Implement this function.
-	 */
+
+	int *tp = kmalloc(sizeof(int) * 2);
+
+	get_straight_points(direction, tp);
+
+	P(sem_stoplight);
+
+	// Wait until first position is available
+	lock_acquire(lk[tp[0]]);
+	
+	// Move the car into the space
+	inQuadrant(tp[0], index);
+
+	// Wait until 2nd position is available
+	lock_acquire(lk[tp[1]]);
+	
+	// Free 1st position and move the car into the 2nd position
+	inQuadrant(tp[1], index);
+	lock_release(lk[tp[0]]); 
+
+	// Leave the intersection and free the space
+	leaveIntersection(index);
+	lock_release(lk[tp[1]]);
+	
+	V(sem_stoplight);
+
+	kfree(tp);
+
 	return;
 }
 void
@@ -111,8 +214,40 @@ turnleft(uint32_t direction, uint32_t index)
 {
 	(void)direction;
 	(void)index;
-	/*
-	 * Implement this function.
-	 */
+
+	int *tp = kmalloc(sizeof(int) * 3);
+
+	get_lt_points(direction, tp);
+	
+	P(sem_stoplight);
+
+	// Wait until first position is available
+	lock_acquire(lk[tp[0]]);
+
+	// Move the car into the space
+	inQuadrant(tp[0], index);
+
+	// Wait until 2nd position is available
+	lock_acquire(lk[tp[1]]);
+	
+	// Free 1st position and move the car into the 2nd position
+	inQuadrant(tp[1], index);
+	lock_release(lk[tp[0]]); 
+	
+	// Wait until 3rd position is available
+	lock_acquire(lk[tp[2]]);
+	
+	// Free 2nd position and move the car into the 3rd position
+	inQuadrant(tp[2], index);
+	lock_release(lk[tp[1]]); 
+
+	// Leave the intersection and free the space
+	leaveIntersection(index);
+	lock_release(lk[tp[2]]);
+
+	V(sem_stoplight);
+
+	kfree(tp);
+	
 	return;
 }
