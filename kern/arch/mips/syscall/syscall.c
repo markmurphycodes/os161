@@ -97,6 +97,8 @@ syscall(struct trapframe *tf)
 	 * like write.
 	 */
 
+	// Init err to 0 to get rid of compiler warning
+	err = 0;
 	retval = 0;
 
 	switch (callno) {
@@ -109,7 +111,35 @@ syscall(struct trapframe *tf)
 				 (userptr_t)tf->tf_a1);
 		break;
 
-	    /* Add stuff here */
+
+		// sys_open(const char *filename, int flags)
+			case SYS_open:
+		err = sys_open((const_userptr_t)tf->tf_a0, tf->tf_a1, (userptr_t)tf->tf_v0);
+		if (retval == 0)
+		break;
+
+		// sys_close(int close_fd)
+			case SYS_close:
+		err = sys_close(tf->tf_a0);
+		break;
+
+			case SYS_write:
+		// sys_write(int write_fd, const void *buf, size_t buflen)
+		// Will return a file descriptor index (positive integer) else -1.
+		// If there is an error, -1 will be returned and
+		retval = sys_write(tf->tf_a0, (const_userptr_t)tf->tf_a1, tf->tf_a2, (userptr_t)tf->tf_v0);
+		if (retval != 0) {
+			err = retval;
+		}
+		break;
+
+			case SYS_read:
+		// sys_read(int read_fd, void *buf, size_t buflen)
+		retval = sys_read(tf->tf_a0, (userptr_t)tf->tf_a1, tf->tf_a2, (userptr_t)tf->tf_v0);
+		if (retval != 0) {
+			err = retval;
+		}
+		break;
 
 	    default:
 		kprintf("Unknown syscall %d\n", callno);

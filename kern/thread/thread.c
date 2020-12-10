@@ -114,6 +114,23 @@ thread_checkstack(struct thread *thread)
 	}
 }
 
+void
+t_ftable_init(struct thread *t, void *dest, void *source) {
+
+	(void)t;
+	
+	// TODO add synchronization to this function
+	
+	if (source == NULL) {
+		memset(dest, 0, sizeof(dest));
+	}
+	else {
+		memcpy(dest, source, sizeof(source));
+	}
+
+}
+
+
 /*
  * Create a thread. This is used both to create a first thread
  * for each CPU and to create subsequent forked threads.
@@ -145,6 +162,8 @@ thread_create(const char *name)
 	thread->t_context = NULL;
 	thread->t_cpu = NULL;
 	thread->t_proc = NULL;
+	t_ftable_init(thread, thread->t_ftable, NULL);
+
 	HANGMAN_ACTORINIT(&thread->t_hangman, thread->t_name);
 
 	/* Interrupt state fields */
@@ -532,6 +551,9 @@ thread_fork(const char *name,
 
 	/* Thread subsystem fields */
 	newthread->t_cpu = curthread->t_cpu;
+
+	// Copy filetable to the new thread
+	t_ftable_init(newthread, newthread->t_ftable, curthread->t_ftable);
 
 	/* Attach the new thread to its process */
 	if (proc == NULL) {

@@ -39,6 +39,8 @@
 #include <array.h>
 #include <spinlock.h>
 #include <threadlist.h>
+#include <kern/fdesc.h>
+#include <limits.h>
 
 struct cpu;
 
@@ -93,6 +95,7 @@ struct thread {
 	struct switchframe *t_context;	/* Saved register context (on stack) */
 	struct cpu *t_cpu;		/* CPU thread runs on */
 	struct proc *t_proc;		/* Process thread belongs to */
+	struct fdesc *t_ftable[OPEN_MAX];
 	HANGMAN_ACTOR(t_hangman);	/* Deadlock detector hook */
 
 	/*
@@ -128,6 +131,9 @@ struct thread {
 
 DECLARRAY(thread, THREADINLINE);
 DEFARRAY(thread, THREADINLINE);
+
+/* Call to initialize file table */
+void t_ftable_init(struct thread *, void *, void *);
 
 /* Call once during system startup to allocate data structures. */
 void thread_bootstrap(void);

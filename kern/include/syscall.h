@@ -30,6 +30,7 @@
 #ifndef _SYSCALL_H_
 #define _SYSCALL_H_
 
+#include <kern/file_syscalls.h> /* for file related syscalls */
 
 #include <cdefs.h> /* for __DEAD */
 struct trapframe; /* from <machine/trapframe.h> */

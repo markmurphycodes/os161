@@ -27,6 +27,9 @@
  * SUCH DAMAGE.
  */
 
+
+#include <types.h>
+
 #ifndef _KERN_FCNTL_H_
 #define _KERN_FCNTL_H_
 
