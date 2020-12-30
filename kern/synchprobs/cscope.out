@@ -1,0 +1,412 @@
+cscope 15 $HOME/os161/kern/synchprobs               0000002214
+	@stoplight.c
+
+66 
+	~<ty³s.h
+>
+
+67 
+	~<lib.h
+>
+
+68 
+	~<th»ad.h
+>
+
+69 
+	~<‹¡.h
+>
+
+70 
+	~<synch.h
+>
+
+77 
+	$¡İlight_š™
+() {
+
+79 
+	}
+}
+
+85 
+	$¡İlight_ş—nup
+() {
+
+87 
+	}
+}
+
+90 
+	$tuºright
+(
+ušt32_t
+ 
+dœeùiÚ
+, ušt32_ˆ
+šdex
+)
+
+92 ()
+dœeùiÚ
+;
+
+93 ()
+šdex
+;
+
+98 
+	}
+}
+
+100 
+	$go¡¿ight
+(
+ušt32_t
+ 
+dœeùiÚ
+, ušt32_ˆ
+šdex
+)
+
+102 ()
+dœeùiÚ
+;
+
+103 ()
+šdex
+;
+
+108 
+	}
+}
+
+110 
+	$tuºËá
+(
+ušt32_t
+ 
+dœeùiÚ
+, ušt32_ˆ
+šdex
+)
+
+112 ()
+dœeùiÚ
+;
+
+113 ()
+šdex
+;
+
+118 
+	}
+}
+
+	@whalemating.c
+
+37 
+	~<ty³s.h
+>
+
+38 
+	~<lib.h
+>
+
+39 
+	~<th»ad.h
+>
+
+40 
+	~<‹¡.h
+>
+
+41 
+	~<synch.h
+>
+
+43 
+lock
+ *
+	gm®e_lock
+;
+
+44 
+lock
+ *
+	gãm®e_lock
+;
+
+45 
+lock
+ *
+	gm©ch_lock
+;
+
+46 
+cv
+ *
+	gm®e_cv
+;
+
+47 
+cv
+ *
+	gãm®e_cv
+;
+
+48 
+cv
+ *
+	gm©ch_cv
+;
+
+50 vŞ©
+	gnum_m®es
+ = 0;
+
+51 vŞ©
+	gnum_ãm®es
+ = 0;
+
+52 vŞ©
+	gnum_m©ches
+ = 0;
+
+53 vŞ©
+	gnum_m©chmak”s
+ = 0;
+
+61 
+	$wh®em©šg_š™
+() {
+
+63 ià(
+m®e_lock
+ =ğ
+NULL
+) {
+
+64 
+	`lock_ü—‹
+("male_lock");
+
+65 ià(
+m®e_lock
+ =ğ
+NULL
+) {
+
+66 
+	`·nic
+("male_lock creation failed!");
+
+69 ià(
+ãm®e_lock
+ =ğ
+NULL
+) {
+
+70 
+	`lock_ü—‹
+("female_lock");
+
+71 ià(
+ãm®e_lock
+ =ğ
+NULL
+) {
+
+72 
+	`·nic
+("female_lock creation failed!");
+
+75 ià(
+m©ch_lock
+ =ğ
+NULL
+) {
+
+76 
+	`lock_ü—‹
+("match_lock");
+
+77 ià(
+m©ch_lock
+ =ğ
+NULL
+) {
+
+78 
+	`·nic
+("match_lock creation failed!");
+
+82 ià(
+m®e_cv
+ =ğ
+NULL
+) {
+
+83 
+	`cv_ü—‹
+("male_cv");
+
+84 ià(
+m®e_cv
+ =ğ
+NULL
+) {
+
+85 
+	`·nic
+("male_cv creation failed!");
+
+89 ià(
+ãm®e_cv
+ =ğ
+NULL
+) {
+
+90 
+	`cv_ü—‹
+("female_cv");
+
+91 ià(
+ãm®e_cv
+ =ğ
+NULL
+) {
+
+92 
+	`·nic
+("female_cv creation failed!");
+
+96 ià(
+m©ch_cv
+ =ğ
+NULL
+) {
+
+97 
+	`cv_ü—‹
+("match_cv");
+
+98 ià(
+m©ch_cv
+ =ğ
+NULL
+) {
+
+99 
+	`·nic
+("match_cv creation failed!");
+
+110 
+	`wh®em©šg_ş—nup
+() {
+
+112 
+	`lock_de¡roy
+(
+m®e_lock
+);
+
+113 
+	`lock_de¡roy
+(
+ãm®e_lock
+);
+
+114 
+	`lock_d‘roy
+(
+m©ch_lock
+);
+
+116 
+	`cv_de¡roy
+(
+m®e_cv
+);
+
+117 
+	`cv_de¡roy
+(
+ãm®e_cv
+);
+
+118 
+	`cv_de¡roy
+(
+m©ch_cv
+);
+
+120 
+	`kä“
+(
+num_m®es
+);
+
+121 
+	`kä“
+(
+num_ãm®es
+);
+
+122 
+	`kä“
+(
+num_m©ches
+);
+
+123 
+	`kä“
+(
+num_m©chmak”s
+);
+
+128 
+	`m®e
+(
+ušt32_t
+ 
+šdex
+)
+
+130 ()
+šdex
+;
+
+140 
+	`ãm®e
+(
+ušt32_t
+ 
+šdex
+)
+
+142 ()
+šdex
+;
+
+151 
+	`m©chmak”
+(
+ušt32_t
+ 
+šdex
+)
+
+153 ()
+šdex
+;
+
+	@
+1
+.
+1
+/usr/include
+2
+26
+stoplight.c
+whalemating.c

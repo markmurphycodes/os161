@@ -68,6 +68,7 @@ runprogram(char *progname)
 	/* Open console files */
 	result = open_console_files();
 	if (result) {
+		proc_destroy(proc);
 		return result;
 	}
 

@@ -1,0 +1,28 @@
+/*
+ * File Table and file description structs
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+
+
+
+#include <synch.h>
+
+struct fdesc {
+				char *name;
+				int openflags;
+				off_t ofst;
+				int refnum;
+				struct vnode *vn;
+				struct lock *lk;
+};

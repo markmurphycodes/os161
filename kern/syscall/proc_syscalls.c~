@@ -1,0 +1,82 @@
+#include <kern/proc_syscalls.h>
+#include <thread.h>
+#include <current.h>
+#include <proc.h>
+#include <mips/trapframe.h>
+#include <addrspace.h>
+#include <types.h>
+
+void child_entry(void *tf, unsigned long data2) {
+	(void)data2;
+	struct trapframe *tf_old = tf;
+	struct trapframe *tf_new = kmalloc(sizeof(struct trapframe));
+
+	// Child returns 0
+	tf_old->tf_v0 = 0;
+	tf_old->tf_a3 = 0;
+
+	// Advance PC
+	tf_old->tf_epc += 4;
+
+	// Copy trapframe from kernel stack
+	memcpy(&tf_new, (struct trapframe *)tf, sizeof(struct trapframe));
+
+	as_activate();
+
+	kfree(tf);
+	kfree(tf_old);
+
+	mips_usermode(tf_new);
+
+}
+
+pid_t sys_getpid() {
+	return curthread->t_pid;
+}
+
+
+pid_t sys_fork(struct trapframe *tf, int *retval) {
+	struct addrspace *new_as;
+	struct proc *new_p;
+	struct trapframe *new_tf;
+
+	int result = 0;
+
+	// Create new process
+	new_p = proc_create(curthread->t_name);
+
+	// Allocate pid
+	result = pid_allocate(new_p);
+	if (result) {
+		return result;
+	}
+
+	// Copy calling process' trapframe and address space
+	result = as_copy(curthread->t_proc->p_addrspace, &new_as);
+	if (result) {
+		return result;
+	}
+
+	memcpy(new_tf, tf, sizeof(struct trapframe));
+
+	new_p->p_addrspace = new_as;
+
+	// Fork thread
+	thread_fork(curproc->p_name, new_p,
+                child_entry,
+                new_tf, 0);
+
+
+	*retval = new_p->p_pid;
+	return 0;
+
+}
+
+
+int sys_execv();
+
+
+pid_t sys_waitpid();
+
+
+void sys_exit();

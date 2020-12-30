@@ -154,7 +154,6 @@ thread_create(const char *name)
 	strcpy(thread->t_name, name);
 	thread->t_wchan_name = "NEW";
 	thread->t_state = S_READY;
-	thread->t_pid = thread->t_proc->p_pid;
 
 	/* Thread subsystem fields */
 	thread_machdep_init(&thread->t_machdep);

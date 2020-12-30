@@ -3,7 +3,7 @@
 #include <kern/fcntl.h>
 #include <copyinout.h>
 #include <limits.h>
-#include <types.h>
+#include <kern/types.h>
 #include <kern/errno.h>
 #include <lib.h>
 #include <current.h>

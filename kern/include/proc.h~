@@ -108,6 +108,8 @@ struct addrspace *proc_setas(struct addrspace *);
 
 int pid_allocate(struct proc*);
 
+void proc_startup();
+
 int open_console_files(void);
 
 void proc_startup(void);
